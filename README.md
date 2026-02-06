@@ -26,7 +26,7 @@
     mkdir -p ~/ros2_ws/src
     cd ~/ros2_ws
     # 将本仓库克隆到 src/ 目录下
-    git clone <您的仓库地址> .
+    git clone <仓库地址> .
     ```
 
 2.  **安装依赖**
@@ -83,7 +83,7 @@ ros2 launch gluon_moveit_config move_group_demo.launch.py
     ```
 
 *   **RViz 显示问题**：
-    如果您在无头模式（无显示器）的服务器环境运行，RViz 启动失败是正常现象，不会影响核心的运动规划功能。
+    如果在无头模式（无显示器）的服务器环境运行，RViz 启动失败是正常现象，不会影响核心的运动规划功能。
 
 ## 📝 许可证
 
