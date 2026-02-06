@@ -1,0 +1,7 @@
+<library path="gluon_control">
+  <class name="gluon_control/GluonSystemInterface" type="gluon_control::GluonSystemInterface" base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Gluon hardware interface
+    </description>
+  </class>
+</library>
