@@ -1,0 +1,21 @@
+ros2 launch gluon_moveit_config target_approach.launch.py \
+  use_realsense:=true \
+  use_ros2_control:=true \
+  use_move_group:=true \
+  use_rviz:=true \
+  use_static_camera_tf:=false \
+  planning_frame:=base_link \
+  ee_link:=6_Link \
+  dry_run:=false \
+  position_only_target:=false \
+  target_label:=energy_unit \
+  approach_distance:=0.10 \
+  stop_distance:=0.02 \
+  min_x:=0.00 \
+  max_x:=0.70 \
+  min_y:=-0.35 \
+  max_y:=0.35 \
+  min_z:=0.02 \
+  max_z:=0.75 \
+  max_velocity_scaling:=0.1 \
+  max_acceleration_scaling:=0.05

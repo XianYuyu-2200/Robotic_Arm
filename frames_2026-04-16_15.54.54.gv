@@ -1,0 +1,18 @@
+digraph G {
+"base_link" -> "1_Link"[label=" Broadcaster: default_authority\nAverage rate: 16.865\nBuffer length: 5.04\nMost recent transform: 1776326094.310379\nOldest transform: 1776326089.270359\n"];
+"dummy" -> "base_link"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"1_Link" -> "2_Link"[label=" Broadcaster: default_authority\nAverage rate: 16.865\nBuffer length: 5.04\nMost recent transform: 1776326094.310379\nOldest transform: 1776326089.270359\n"];
+"2_Link" -> "3_Link"[label=" Broadcaster: default_authority\nAverage rate: 16.865\nBuffer length: 5.04\nMost recent transform: 1776326094.310379\nOldest transform: 1776326089.270359\n"];
+"3_Link" -> "4_Link"[label=" Broadcaster: default_authority\nAverage rate: 16.865\nBuffer length: 5.04\nMost recent transform: 1776326094.310379\nOldest transform: 1776326089.270359\n"];
+"4_Link" -> "5_Link"[label=" Broadcaster: default_authority\nAverage rate: 16.865\nBuffer length: 5.04\nMost recent transform: 1776326094.310379\nOldest transform: 1776326089.270359\n"];
+"5_Link" -> "6_Link"[label=" Broadcaster: default_authority\nAverage rate: 16.865\nBuffer length: 5.04\nMost recent transform: 1776326094.310379\nOldest transform: 1776326089.270359\n"];
+"6_Link" -> "camera_link"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"camera_link" -> "camera_color_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"camera_color_frame" -> "camera_color_optical_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"camera_link" -> "camera_depth_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"camera_depth_frame" -> "camera_depth_optical_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1776326094.3207393"[ shape=plaintext ] ;
+}->"dummy";
+}

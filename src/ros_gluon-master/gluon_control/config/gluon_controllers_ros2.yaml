@@ -1,0 +1,36 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 50  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    forward_position_controller:
+      type: position_controllers/JointGroupPositionController
+
+    joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+joint_trajectory_controller:
+  ros__parameters:
+    joints:
+      - axis_joint_1
+      - axis_joint_2
+      - axis_joint_3
+      - axis_joint_4
+      - axis_joint_5
+      - axis_joint_6
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+
+forward_position_controller:
+  ros__parameters:
+    joints:
+      - axis_joint_1
+      - axis_joint_2
+      - axis_joint_3
+      - axis_joint_4
+      - axis_joint_5
+      - axis_joint_6
