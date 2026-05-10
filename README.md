@@ -1,90 +1,176 @@
-# Gluon 机械臂 ROS 2 Humble 工作空间
+# Gluon Robotic Arm for ROS 2 Humble
 
-本仓库包含 Gluon 机械臂在 Ubuntu 22.04 上适配 ROS 2 Humble 的完整配置。项目整合了底层硬件接口、MoveIt 2 运动规划配置，并提供了一个 C++ 编写的运动控制演示程序。
+这是一个面向 `ROS 2 Humble` 的机械臂工作空间，包含机械臂模型、`ros2_control` 硬件接口、MoveIt 2 运动规划配置，以及一个基于 YOLO 的视觉检测节点。
 
-## 🤖 主要功能
+项目主要目录位于 `src/ros_gluon-master`，另外保留了 `src/innfos-cpp-sdk-master` 作为底层 SDK 参考代码。
 
-*   **支持 ROS 2 Humble**：所有软件包已完全迁移并兼容 Ubuntu 22.04 环境下的 ROS 2 Humble。
-*   **集成 MoveIt 2**：提供完整的 MoveIt 2 配置包 (`gluon_moveit_config`)，包含 SRDF、运动学参数及 OMPL 规划管线。
-*   **硬件接口**：基于 `ros2_control` 实现的 Gluon 执行器硬件通信接口。
-*   **演示程序**：包含一个基于 C++ `move_group` 接口的演示节点，可执行预定义的动作序列。
+## 项目特性
 
-## 🛠️ 环境要求
+- 支持 `Ubuntu 22.04 + ROS 2 Humble`
+- 提供 Gluon 机械臂的 `URDF`、网格模型和基础启动文件
+- 集成 `ros2_control`，可用于控制器加载与状态发布
+- 集成 `MoveIt 2`，可用于机械臂规划、仿真与 RViz 可视化
+- 提供 `move_group_demo` 示例程序
+- 提供 `gluon_vision` YOLO 检测节点，可发布 `vision_msgs/Detection2DArray`
 
-*   **操作系统**: Ubuntu 22.04 LTS (Jammy Jellyfish)
-*   **ROS 版本**: ROS 2 Humble Hawksbill
-*   **依赖包**:
-    *   `moveit`
-    *   `ros2_control`
-    *   `ros2_controllers`
-    *   `xacro`
+## 目录结构
 
-## 📦 安装与编译
+```text
+Robotic_Arm-main/
+├─ src/
+│  ├─ ros_gluon-master/
+│  │  ├─ gluon/                 # 机械臂描述、URDF、mesh、基础节点
+│  │  ├─ gluon_control/         # ros2_control 硬件接口
+│  │  ├─ gluon_moveit_config/   # MoveIt 2 配置与 launch
+│  │  └─ gluon_vision/          # YOLO 视觉检测节点
+│  └─ innfos-cpp-sdk-master/    # 底层 SDK 示例与库文件
+├─ weights/                     # YOLO 模型权重目录（默认不上传到 GitHub）
+├─ build/
+├─ install/
+└─ log/
+```
 
-1.  **克隆仓库**
-    ```bash
-    mkdir -p ~/ros2_ws/src
-    cd ~/ros2_ws
-    # 将本仓库克隆到 src/ 目录下
-    git clone <仓库地址> .
-    ```
+## 环境要求
 
-2.  **安装依赖**
-    ```bash
-    sudo apt update
-    rosdep install --from-paths src --ignore-src -r -y
-    ```
+- Ubuntu 22.04
+- ROS 2 Humble
+- colcon
+- rosdep
+- MoveIt 2
+- ros2_control
+- ros2_controllers
+- xacro
 
-3.  **编译工作空间**
-    ```bash
-    colcon build
-    ```
+如果你需要运行视觉检测，还需要：
 
-4.  **配置环境变量**
-    ```bash
-    source install/setup.bash
-    ```
+- Python 3
+- `ultralytics`
+- `opencv-python`
+- `cv_bridge`
+- 相机图像话题输入
 
-## 🚀 使用指南
+## 安装与编译
 
-### 1. 启动机械臂与 MoveIt 2
-此启动文件会同时加载 `ros2_control` 节点、`robot_state_publisher`、MoveIt 2 `move_group` 以及 RViz 可视化界面。
+1. 克隆仓库
 
 ```bash
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws/src
+git clone https://github.com/XianYuyu-2200/Robotic_Arm.git
+```
+
+2. 安装依赖
+
+```bash
+cd ~/ros2_ws
+sudo apt update
+rosdep update
+rosdep install --from-paths src --ignore-src -r -y
+```
+
+3. 编译工作空间
+
+```bash
+colcon build
+```
+
+4. 加载环境
+
+```bash
+source install/setup.bash
+```
+
+## 启动 MoveIt 2 演示
+
+这个启动文件会加载：
+
+- `robot_state_publisher`
+- `ros2_control_node`
+- `joint_state_broadcaster`
+- `joint_trajectory_controller`
+- MoveIt `move_group`
+- RViz
+
+启动命令：
+
+```bash
+source install/setup.bash
 ros2 launch gluon_moveit_config demo.launch.py
 ```
 
-### 2. 运行运动规划演示
-在新的终端窗口中运行以下命令。该演示程序将控制机械臂执行：**复位 (Home) -> 测试姿态 1 -> 测试姿态 2 -> 复位 (Home)** 的循环动作。
+默认参数里启用了 `use_fake_hardware=true`，适合先做仿真和联调。
+
+## 运行运动规划示例
+
+项目中带有一个 `move_group_demo` 示例节点：
 
 ```bash
 source install/setup.bash
 ros2 launch gluon_moveit_config move_group_demo.launch.py
 ```
 
-## 📂 软件包概览
+这个示例会加载机械臂描述、SRDF 和运动学参数，并运行 `gluon_moveit_config` 包中的 `move_group_demo` 可执行程序。
 
-*   **`gluon`**: 包含机械臂的 URDF 描述文件、模型网格 (Meshes) 及基础配置。
-*   **`gluon_control`**: 实现了 `ros2_control` 的 `SystemInterface`，用于与底层 SDK 进行通信。
-*   **`gluon_moveit_config`**: 生成并定制化的 MoveIt 2 配置包。
-    *   `launch/`: 包含演示和实机运行的启动文件。
-    *   `config/`: SRDF、运动学参数和控制器配置文件。
-    *   `src/move_group_demo.cpp`: 轨迹规划与执行的 C++ 示例代码。
+## 运行 YOLO 视觉检测
 
-## 🔧 常见问题排查
+视觉节点位于 `gluon_vision` 包中，默认参数如下：
 
-*   **"Address already in use" (地址已被占用)**：
-    如果在重启 launch 文件时遇到此错误，通常意味着上一次运行的节点没有完全退出。请运行以下命令清理残留进程：
-    ```bash
-    pkill -f ros2_control_node
-    pkill -f move_group
-    pkill -f robot_state_publisher
-    pkill -f spawner
-    ```
+- 模型路径：`weights/best.pt`
+- 输入图像：`/camera/camera/color/image_raw`
+- 检测输出：`/detector/detections`
+- 调试图像：`/detector/debug_image`
 
-*   **RViz 显示问题**：
-    如果在无头模式（无显示器）的服务器环境运行，RViz 启动失败是正常现象，不会影响核心的运动规划功能。
+启动命令：
 
-## 📝 许可证
+```bash
+source install/setup.bash
+ros2 launch gluon_vision yolo_detector.launch.py
+```
 
-本项目采用 BSD 许可证。
+如果需要手动指定模型：
+
+```bash
+ros2 launch gluon_vision yolo_detector.launch.py model_path:=/absolute/path/to/best.pt
+```
+
+也可以通过环境变量指定：
+
+```bash
+export GLUON_MODEL_PATH=/absolute/path/to/best.pt
+```
+
+## 重要说明
+
+- `weights/best.pt` 没有随仓库上传，因为 GitHub 对普通文件有 100MB 限制。如果你要在其他机器运行 YOLO，请自行准备权重文件。
+- `build/`、`install/`、`log/` 属于本地构建产物，不需要提交到仓库。
+- 仓库中包含部分 SDK 动态库与示例文件，跨平台使用时请注意系统环境和依赖版本。
+
+## 常见问题
+
+### 1. `git clone` 后没有检测模型怎么办？
+
+把你的 `best.pt` 放到项目根目录的 `weights/` 下，或者在启动时通过 `model_path:=...` 指定。
+
+### 2. RViz 没有正常显示机械臂怎么办？
+
+先确认已经执行：
+
+```bash
+source install/setup.bash
+```
+
+并检查 `robot_state_publisher`、`move_group`、`controller_manager` 是否都成功启动。
+
+### 3. 控制器没有正常加载怎么办？
+
+可以先检查以下话题和节点：
+
+```bash
+ros2 node list
+ros2 topic list
+ros2 control list_controllers
+```
+
+## License
+
+本项目使用仓库中提供的 [LICENSE](./LICENSE)。
