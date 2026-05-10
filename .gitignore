@@ -5,3 +5,11 @@ weights/
 *.exe
 *.o
 *.pdf
+*.pyc
+__pycache__/
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+*.Zone.Identifier
